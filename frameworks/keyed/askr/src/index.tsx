@@ -1,5 +1,4 @@
 import { createIsland, state } from "@askrjs/askr";
-import { For } from "@askrjs/askr/for";
 
 const adjectives = ["pretty","large","big","small","tall","short","long","handsome","plain","quaint","clean","elegant","easy","angry","crazy","helpful","mushy","odd","unsightly","adorable","important","inexpensive","cheap","expensive","fancy"];
 const colours = ["red","yellow","blue","green","pink","brown","purple","brown","white","black","orange"];
@@ -25,13 +24,13 @@ function Row({
   onRemove,
   selected
 }: {
-  item: { id: number; label: string; selected: boolean };
+  item: { id: number; label: string };
   onSelect: (id: number) => void;
   onRemove: (id: number) => void;
-  selected?: never;
+  selected: number | null;
 }) {
   return (
-    <tr class={item.selected ? "danger" : ""}>
+    <tr class={selected === item.id ? "danger" : ""}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
         <a onClick={(e)=>{e.preventDefault();onSelect(item.id);}}>{item.label}</a>
@@ -120,13 +119,14 @@ function App() {
 
       <table class="table table-hover table-striped test-data">
         <tbody id="tbody">
-          {For(() => data().map(item => ({ ...item, selected: selected() === item.id })), (item) => (
+          {data().map(item => (
             <Row
               item={item}
+              selected={selected()}
               onSelect={select}
               onRemove={remove}
             />
-          ), { by: (item) => item.id })}
+          ))}
         </tbody>
       </table>
 

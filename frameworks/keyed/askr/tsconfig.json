@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "ES2019",
     "module": "ESNext",
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "jsxImportSource": "@askrjs/askr",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": false,
