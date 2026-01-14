@@ -19,6 +19,6 @@
     "typescript": "^5.4.2"
   },
   "dependencies": {
-    "@askrjs/askr": "latest"
+    "@askrjs/askr": "0.0.12"
   }
 }

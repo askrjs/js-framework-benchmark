@@ -1,4 +1,5 @@
 import { createIsland, state } from "@askrjs/askr";
+import { For } from "@askrjs/askr/for";
 
 const adjectives = ["pretty","large","big","small","tall","short","long","handsome","plain","quaint","clean","elegant","easy","angry","crazy","helpful","mushy","odd","unsightly","adorable","important","inexpensive","cheap","expensive","fancy"];
 const colours = ["red","yellow","blue","green","pink","brown","purple","brown","white","black","orange"];
@@ -24,20 +25,20 @@ function Row({
   onRemove,
   selected
 }: {
-  item: { id: number; label: string };
+  item: { id: number; label: string; selected: boolean };
   onSelect: (id: number) => void;
   onRemove: (id: number) => void;
-  selected: number | null;
+  selected?: never;
 }) {
   return (
-    <tr class={selected === item.id ? "danger" : ""}>
+    <tr class={item.selected ? "danger" : ""}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
-        <a class="lbl" onClick={(e)=>{e.preventDefault();onSelect(item.id);}}>{item.label}</a>
+        <a onClick={(e)=>{e.preventDefault();onSelect(item.id);}}>{item.label}</a>
       </td>
       <td class="col-md-1">
         <a onClick={(e)=>{e.preventDefault();onRemove(item.id);}}>
-          <span class="remove glyphicon glyphicon-remove" aria-hidden="true"></span>
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </a>
       </td>
       <td class="col-md-6"></td>
@@ -119,15 +120,13 @@ function App() {
 
       <table class="table table-hover table-striped test-data">
         <tbody id="tbody">
-          {data().map(item => (
+          {For(() => data().map(item => ({ ...item, selected: selected() === item.id })), (item) => (
             <Row
-              key={item.id}
               item={item}
               onSelect={select}
               onRemove={remove}
-              selected={selected()}
             />
-          ))}
+          ), { by: (item) => item.id })}
         </tbody>
       </table>
 

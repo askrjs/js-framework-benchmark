@@ -12,12 +12,17 @@ function buildData(count=1000){
   return data;
 }
 
-function Row({item, onSelect, onRemove, selected}){
+function Row({item, onSelect, onRemove, selected}: {
+  item: { id: number; label: string };
+  onSelect: (id: number) => void;
+  onRemove: (id: number) => void;
+  selected: number | null;
+}){
   return (
     <tr class={selected===item.id? 'danger':''}>
       <td class="col-md-1">{item.id}</td>
-      <td class="col-md-4"><a class="lbl" onClick={(e)=>{e.preventDefault();onSelect(item.id);}}>{item.label}</a></td>
-      <td class="col-md-1"><a onClick={(e)=>{e.preventDefault();onRemove(item.id);}}><span class="remove glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+      <td class="col-md-4"><a onClick={(e)=>{e.preventDefault();onSelect(item.id);}}>{item.label}</a></td>
+      <td class="col-md-1"><a onClick={(e)=>{e.preventDefault();onRemove(item.id);}}><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
       <td class="col-md-6"></td>
     </tr>
   )
