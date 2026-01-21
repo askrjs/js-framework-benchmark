@@ -1,4 +1,4 @@
-import { createIsland, state } from '@askrjs/askr';
+import { createIsland, state, For } from '@askrjs/askr';
 
 const adjectives = ["pretty","large","big","small","tall","short","long","handsome","plain","quaint","clean","elegant","easy","angry","crazy","helpful","mushy","odd","unsightly","adorable","important","inexpensive","cheap","expensive","fancy"];
 const colours = ["red","yellow","blue","green","pink","brown","purple","brown","white","black","orange"];
@@ -16,10 +16,10 @@ function Row({item, onSelect, onRemove, selected}: {
   item: { id: number; label: string };
   onSelect: (id: number) => void;
   onRemove: (id: number) => void;
-  selected: number | null;
+  selected: () => number | null;
 }){
   return (
-    <tr class={selected===item.id? 'danger':''}>
+    <tr class={selected()===item.id? 'danger':''}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4"><a onClick={(e)=>{e.preventDefault();onSelect(item.id);}}>{item.label}</a></td>
       <td class="col-md-1"><a onClick={(e)=>{e.preventDefault();onRemove(item.id);}}><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
@@ -64,7 +64,13 @@ function App(){
 
       <table class="table table-hover table-striped test-data">
         <tbody id="tbody">
-          {data().map(item => <Row item={item} onSelect={select} onRemove={remove} selected={selected()} />)}
+          {For(
+            () => data(),
+            (item: { id: number; label: string }, index) => (
+              <Row key={item.id} item={item} selected={selected} onSelect={select} onRemove={remove} />
+            ),
+            { by: (item: { id: number; label: string }) => item.id }
+          )}
         </tbody>
       </table>
       <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>

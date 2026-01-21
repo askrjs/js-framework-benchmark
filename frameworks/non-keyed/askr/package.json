@@ -14,10 +14,10 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^5.4.10",
-    "typescript": "^5.4.2"
+    "vite": "^7.3.1",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@askrjs/askr": "0.0.12"
+    "@askrjs/askr": "0.0.15"
   }
 }

@@ -1,8 +1,48 @@
-import { createIsland, state } from "@askrjs/askr";
+import { createIsland, state, For } from "@askrjs/askr";
 
-const adjectives = ["pretty","large","big","small","tall","short","long","handsome","plain","quaint","clean","elegant","easy","angry","crazy","helpful","mushy","odd","unsightly","adorable","important","inexpensive","cheap","expensive","fancy"];
-const colours = ["red","yellow","blue","green","pink","brown","purple","brown","white","black","orange"];
-const nouns = ["table","chair","house","bbq","desk","car","pony","cookie","sandwich","burger","pizza","mouse","keyboard"];
+const adjectives = [
+  "pretty",
+  "large",
+  "big",
+  "small",
+  "tall",
+  "short",
+  "long",
+  "handsome",
+  "plain",
+  "quaint",
+  "clean",
+  "elegant",
+  "easy",
+  "angry",
+  "crazy",
+  "helpful",
+  "mushy",
+  "odd",
+  "unsightly",
+  "adorable",
+  "important",
+  "inexpensive",
+  "cheap",
+  "expensive",
+  "fancy",
+];
+const colours = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
+const nouns = [
+  "table",
+  "chair",
+  "house",
+  "bbq",
+  "desk",
+  "car",
+  "pony",
+  "cookie",
+  "sandwich",
+  "burger",
+  "pizza",
+  "mouse",
+  "keyboard",
+];
 
 let nextId = 1;
 const rand = (max: number) => Math.round(Math.random() * 1000) % max;
@@ -12,7 +52,7 @@ function buildData(count = 1000) {
   for (let i = 0; i < count; i++) {
     data.push({
       id: nextId++,
-      label: `${adjectives[rand(adjectives.length)]} ${colours[rand(colours.length)]} ${nouns[rand(nouns.length)]}`
+      label: `${adjectives[rand(adjectives.length)]} ${colours[rand(colours.length)]} ${nouns[rand(nouns.length)]}`,
     });
   }
   return data;
@@ -22,21 +62,33 @@ function Row({
   item,
   onSelect,
   onRemove,
-  selected
+  selected,
 }: {
   item: { id: number; label: string };
   onSelect: (id: number) => void;
   onRemove: (id: number) => void;
-  selected: number | null;
+  selected: () => number | null;
 }) {
   return (
-    <tr class={selected === item.id ? "danger" : ""}>
+    <tr class={selected() === item.id ? "danger" : ""}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
-        <a onClick={(e)=>{e.preventDefault();onSelect(item.id);}}>{item.label}</a>
+        <a
+          onClick={(e) => {
+            e.preventDefault();
+            onSelect(item.id);
+          }}
+        >
+          {item.label}
+        </a>
       </td>
       <td class="col-md-1">
-        <a onClick={(e)=>{e.preventDefault();onRemove(item.id);}}>
+        <a
+          onClick={(e) => {
+            e.preventDefault();
+            onRemove(item.id);
+          }}
+        >
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </a>
       </td>
@@ -51,17 +103,14 @@ function App() {
 
   const run = () => data.set(buildData(1000));
   const runLots = () => data.set(buildData(10000));
-  const add = () => data.set(d => d.concat(buildData(1000)));
-  const update = () =>
-    data.set(d =>
-      d.map((it, i) => (i % 10 === 0 ? { ...it, label: it.label + " !!!" } : it))
-    );
+  const add = () => data.set((d) => d.concat(buildData(1000)));
+  const update = () => data.set((d) => d.map((it, i) => (i % 10 === 0 ? { ...it, label: it.label + " !!!" } : it)));
   const clear = () => {
     data.set([]);
     selected.set(null);
   };
   const swapRows = () =>
-    data.set(d => {
+    data.set((d) => {
       if (d.length > 998) {
         const copy = d.slice();
         const tmp = copy[1];
@@ -72,14 +121,16 @@ function App() {
       return d;
     });
 
-  const remove = (id: number) => data.set(d => d.filter(it => it.id !== id));
+  const remove = (id: number) => data.set((d) => d.filter((it) => it.id !== id));
   const select = (id: number) => selected.set(id);
 
   return (
     <div class="container">
       <div class="jumbotron">
         <div class="row">
-          <div class="col-md-6"><h1>Askr-keyed</h1></div>
+          <div class="col-md-6">
+            <h1>Askr-keyed</h1>
+          </div>
           <div class="col-md-6">
             <div class="row">
               <div class="col-sm-6 smallpad">
@@ -119,14 +170,13 @@ function App() {
 
       <table class="table table-hover table-striped test-data">
         <tbody id="tbody">
-          {data().map(item => (
-            <Row
-              item={item}
-              selected={selected()}
-              onSelect={select}
-              onRemove={remove}
-            />
-          ))}
+          {For(
+            () => data(),
+            (item: { id: number; label: string }, index) => (
+              <Row key={item.id} item={item} selected={selected} onSelect={select} onRemove={remove} />
+            ),
+            { by: (item: { id: number; label: string }) => item.id }
+          )}
         </tbody>
       </table>
 
