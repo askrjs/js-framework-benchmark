@@ -5,11 +5,12 @@
   "private": true,
   "js-framework-benchmark": {
     "frameworkVersionFromPackage": "@askrjs/askr",
-    "frameworkHomeURL": "",
+    "frameworkHomeURL": "https://github.com/askrjs/askr",
     "customURL": "/dist"
   },
   "scripts": {
     "dev": "vite",
+    "build": "vite build",
     "build-prod": "vite build",
     "preview": "vite preview"
   },
@@ -18,6 +19,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@askrjs/askr": "0.0.15"
+    "@askrjs/askr": "0.0.19"
   }
 }

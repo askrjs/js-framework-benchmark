@@ -58,37 +58,29 @@ function buildData(count = 1000) {
   return data;
 }
 
-function Row({
-  item,
-  onSelect,
-  onRemove,
-  selected,
-}: {
-  item: { id: number; label: string };
+interface RowData {
+  id: number;
+  label: string;
+}
+
+interface RowProps {
+  item: RowData;
+  selected: () => number | null;
   onSelect: (id: number) => void;
   onRemove: (id: number) => void;
-  selected: () => number | null;
-}) {
+}
+
+function Row({ item, selected, onSelect, onRemove }: RowProps) {
   return (
     <tr class={selected() === item.id ? "danger" : ""}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
-        <a
-          onClick={(e) => {
-            e.preventDefault();
-            onSelect(item.id);
-          }}
-        >
+        <a onClick={(e) => { e.preventDefault(); onSelect(item.id); }}>
           {item.label}
         </a>
       </td>
       <td class="col-md-1">
-        <a
-          onClick={(e) => {
-            e.preventDefault();
-            onRemove(item.id);
-          }}
-        >
+        <a onClick={(e) => { e.preventDefault(); onRemove(item.id); }}>
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </a>
       </td>
@@ -98,13 +90,16 @@ function Row({
 }
 
 function App() {
-  const data = state<{ id: number; label: string }[]>([]);
+  const data = state<RowData[]>([]);
   const selected = state<number | null>(null);
 
   const run = () => data.set(buildData(1000));
   const runLots = () => data.set(buildData(10000));
   const add = () => data.set((d) => d.concat(buildData(1000)));
-  const update = () => data.set((d) => d.map((it, i) => (i % 10 === 0 ? { ...it, label: it.label + " !!!" } : it)));
+  const update = () =>
+    data.set((d) =>
+      d.map((it, i) => (i % 10 === 0 ? { ...it, label: it.label + " !!!" } : it))
+    );
   const clear = () => {
     data.set([]);
     selected.set(null);
@@ -172,10 +167,15 @@ function App() {
         <tbody id="tbody">
           {For(
             () => data(),
-            (item: { id: number; label: string }, index) => (
-              <Row key={item.id} item={item} selected={selected} onSelect={select} onRemove={remove} />
+            (item) => (
+              <Row
+                item={item}
+                selected={selected}
+                onSelect={select}
+                onRemove={remove}
+              />
             ),
-            { by: (item: { id: number; label: string }) => item.id }
+            { by: (item) => item.id }
           )}
         </tbody>
       </table>
@@ -185,4 +185,4 @@ function App() {
   );
 }
 
-createIsland({ root: document.getElementById("main")!, component: App });
+createIsland({ root: "main", component: App });
