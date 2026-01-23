@@ -1,4 +1,4 @@
-import { createIsland, state, For } from '@askrjs/askr';
+﻿import { createIsland, state, For } from '@askrjs/askr';
 
 const adjectives = [
   "pretty", "large", "big", "small", "tall", "short", "long", "handsome",
