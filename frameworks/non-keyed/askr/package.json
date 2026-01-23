@@ -19,6 +19,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@askrjs/askr": "file:../../../../askr"
+    "@askrjs/askr": "^0.0.21"
   }
 }

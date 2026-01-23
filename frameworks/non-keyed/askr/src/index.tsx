@@ -1,37 +1,66 @@
-﻿import { createIsland, state, For } from '@askrjs/askr';
+﻿import { createIsland, state, For } from "@askrjs/askr";
 
 const adjectives = [
-  "pretty", "large", "big", "small", "tall", "short", "long", "handsome",
-  "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful",
-  "mushy", "odd", "unsightly", "adorable", "important", "inexpensive",
-  "cheap", "expensive", "fancy"
+  "pretty",
+  "large",
+  "big",
+  "small",
+  "tall",
+  "short",
+  "long",
+  "handsome",
+  "plain",
+  "quaint",
+  "clean",
+  "elegant",
+  "easy",
+  "angry",
+  "crazy",
+  "helpful",
+  "mushy",
+  "odd",
+  "unsightly",
+  "adorable",
+  "important",
+  "inexpensive",
+  "cheap",
+  "expensive",
+  "fancy",
 ];
-const colours = [
-  "red", "yellow", "blue", "green", "pink", "brown", "purple",
-  "brown", "white", "black", "orange"
-];
+const colours = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
 const nouns = [
-  "table", "chair", "house", "bbq", "desk", "car", "pony",
-  "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"
+  "table",
+  "chair",
+  "house",
+  "bbq",
+  "desk",
+  "car",
+  "pony",
+  "cookie",
+  "sandwich",
+  "burger",
+  "pizza",
+  "mouse",
+  "keyboard",
 ];
 
 let nextId = 1;
 const rand = (max: number) => Math.round(Math.random() * 1000) % max;
 
-interface RowData {
-  id: number;
-  label: string;
-}
-
-function buildData(count = 1000): RowData[] {
+function buildData(count = 1000) {
   const data: RowData[] = [];
   for (let i = 0; i < count; i++) {
     data.push({
       id: nextId++,
-      label: `${adjectives[rand(adjectives.length)]} ${colours[rand(colours.length)]} ${nouns[rand(nouns.length)]}`
+      label: `${adjectives[rand(adjectives.length)]} ${colours[rand(colours.length)]} ${nouns[rand(nouns.length)]}`,
     });
   }
   return data;
+}
+
+interface RowData {
+  id: number;
+  label: string;
 }
 
 interface RowProps {
@@ -43,7 +72,7 @@ interface RowProps {
 
 function Row({ item, selected, onSelect, onRemove }: RowProps) {
   return (
-    <tr class={selected() === item.id ? 'danger' : ''}>
+    <tr class={() => (selected() === item.id ? "danger" : "")}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
         <a onClick={(e) => { e.preventDefault(); onSelect(item.id); }}>
@@ -69,7 +98,7 @@ function App() {
   const add = () => data.set((d) => d.concat(buildData(1000)));
   const update = () =>
     data.set((d) =>
-      d.map((it, i) => (i % 10 === 0 ? { ...it, label: it.label + ' !!!' } : it))
+      d.map((it, i) => (i % 10 === 0 ? { ...it, label: it.label + " !!!" } : it))
     );
   const clear = () => {
     data.set([]);

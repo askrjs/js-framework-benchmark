@@ -72,10 +72,10 @@ interface RowProps {
 
 function Row({ item, selected, onSelect, onRemove }: RowProps) {
   return (
-    <tr class={selected() === item.id ? "danger" : ""}>
+    <tr class={() => selected() === item.id ? "danger" : ""}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
-        <a onClick={(e) => { e.preventDefault(); console.log("askr-debug: clicked", item.id); onSelect(item.id); }}>
+        <a onClick={(e) => { e.preventDefault(); onSelect(item.id); }}>
           {item.label}
         </a>
       </td>
@@ -117,7 +117,7 @@ function App() {
     });
 
   const remove = (id: number) => data.set((d) => d.filter((it) => it.id !== id));
-  const select = (id: number) => { selected.set(id); setTimeout(() => console.log("askr-debug: post-select tr class:", document.querySelector("tbody>tr:nth-of-type(2)")?.className), 0); };
+  const select = (id: number) => selected.set(id);
 
   return (
     <div class="container">
