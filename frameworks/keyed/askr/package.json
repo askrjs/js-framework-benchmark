@@ -19,6 +19,6 @@
     "vite": "^7.3.1"
   },
   "dependencies": {
-    "@askrjs/askr": "^0.0.21"
+    "@askrjs/askr": "^0.0.24"
   }
 }
