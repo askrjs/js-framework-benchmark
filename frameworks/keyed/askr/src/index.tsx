@@ -72,7 +72,7 @@ interface RowProps {
 
 function Row({ item, selected, onSelect, onRemove }: RowProps) {
   return (
-    <tr class={() => selected() === item.id ? "danger" : ""}>
+    <tr key={item.id} class={() => selected() === item.id ? "danger" : ""}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
         <a onClick={(e) => { e.preventDefault(); onSelect(item.id); }}>
@@ -167,6 +167,7 @@ function App() {
         <tbody id="tbody">
           {For(
             () => data(),
+            (item) => item.id,
             (item) => (
               <Row
                 item={item}
@@ -174,8 +175,7 @@ function App() {
                 onSelect={select}
                 onRemove={remove}
               />
-            ),
-            { by: (item) => item.id }
+            )
           )}
         </tbody>
       </table>
