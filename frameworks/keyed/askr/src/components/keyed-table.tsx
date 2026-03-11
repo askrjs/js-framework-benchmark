@@ -1,29 +1,25 @@
 import { For, type State } from "@askrjs/askr";
 
-import { renderKeyedRow } from "./keyed-row";
+import { KeyedRow } from "./keyed-row";
 import type { RowData } from "../benchmark-types";
 
-export function renderKeyedTable(
-  rows: State<RowData[]>,
-  selectedId: State<number | null>,
-  onSelect: (id: number) => void,
-  onRemove: (id: number) => void
-) {
-  return {
-    type: "table",
-    props: { class: "table table-hover table-striped test-data" },
-    children: [
-      {
-        type: "tbody",
-        props: {},
-        children: [
-          For(
-            () => rows(),
-            (item) => item.id,
-            (item) => renderKeyedRow(item, selectedId() === item.id, onSelect, onRemove)
-          ),
-        ],
-      },
-    ],
-  };
+interface KeyedTableProps {
+  rows: State<RowData[]>;
+  isSelected: (id: number) => boolean;
+  onSelect: (id: number) => void;
+  onRemove: (id: number) => void;
+}
+
+export function KeyedTable({ rows, isSelected, onSelect, onRemove }: KeyedTableProps) {
+  return (
+    <table class="table table-hover table-striped test-data">
+      <tbody>
+        {For(
+          () => rows(),
+          (item) => item.id,
+          (item) => <KeyedRow item={item} isSelected={isSelected} onSelect={onSelect} onRemove={onRemove} />
+        )}
+      </tbody>
+    </table>
+  );
 }

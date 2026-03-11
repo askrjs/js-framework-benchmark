@@ -1,76 +1,37 @@
 import type { RowData } from "../benchmark-types";
 
-function renderLabelCell(item: RowData, onSelect: (id: number) => void) {
-  return {
-    type: "td",
-    props: { class: "col-md-4" },
-    children: [
-      {
-        type: "a",
-        props: {
-          onClick: (event: MouseEvent) => {
+interface KeyedRowProps {
+  item: RowData;
+  isSelected: (id: number) => boolean;
+  onSelect: (id: number) => void;
+  onRemove: (id: number) => void;
+}
+
+export function KeyedRow({ item, isSelected, onSelect, onRemove }: KeyedRowProps) {
+  return (
+    <tr class={() => (isSelected(item.id) ? "danger" : "")}>
+      <td class="col-md-1">{item.id}</td>
+      <td class="col-md-4">
+        <a
+          onClick={(event: MouseEvent) => {
             event.preventDefault();
             onSelect(item.id);
-          },
-        },
-        children: [item.label],
-      },
-    ],
-  };
-}
-
-function renderRemoveCell(item: RowData, onRemove: (id: number) => void) {
-  return {
-    type: "td",
-    props: { class: "col-md-1" },
-    children: [
-      {
-        type: "a",
-        props: {
-          onClick: (event: MouseEvent) => {
+          }}
+        >
+          {item.label}
+        </a>
+      </td>
+      <td class="col-md-1">
+        <a
+          onClick={(event: MouseEvent) => {
             event.preventDefault();
             onRemove(item.id);
-          },
-        },
-        children: [
-          {
-            type: "span",
-            props: {
-              class: "glyphicon glyphicon-remove",
-              "aria-hidden": "true",
-            },
-            children: [],
-          },
-        ],
-      },
-    ],
-  };
-}
-
-export function renderKeyedRow(
-  item: RowData,
-  selected: boolean,
-  onSelect: (id: number) => void,
-  onRemove: (id: number) => void
-) {
-  return {
-    type: "tr",
-    props: {
-      class: selected ? "danger" : "",
-    },
-    children: [
-      {
-        type: "td",
-        props: { class: "col-md-1" },
-        children: [String(item.id)],
-      },
-      renderLabelCell(item, onSelect),
-      renderRemoveCell(item, onRemove),
-      {
-        type: "td",
-        props: { class: "col-md-6" },
-        children: [],
-      },
-    ],
-  };
+          }}
+        >
+          <span class="glyphicon glyphicon-remove" aria-hidden="true" />
+        </a>
+      </td>
+      <td class="col-md-6" />
+    </tr>
+  );
 }

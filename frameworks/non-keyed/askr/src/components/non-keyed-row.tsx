@@ -2,14 +2,14 @@ import type { RowData } from "../benchmark-types";
 
 interface NonKeyedRowProps {
   item: RowData;
-  selected: boolean;
+  isSelected: boolean;
   onSelect: (id: number) => void;
   onRemove: (id: number) => void;
 }
 
-export function NonKeyedRow({ item, selected, onSelect, onRemove }: NonKeyedRowProps) {
+export function NonKeyedRow({ item, isSelected, onSelect, onRemove }: NonKeyedRowProps) {
   return (
-    <tr class={selected ? "danger" : ""}>
+    <tr class={isSelected ? "danger" : ""}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
         <a

@@ -1,34 +1,23 @@
-import { createIsland, state } from "@askrjs/askr";
+import { createIsland, selector, state } from "@askrjs/askr";
 
 import { buildData } from "./benchmark-data";
 import type { ActionSpec, RowData } from "./benchmark-types";
 import { BenchmarkHeader } from "./components/benchmark-header";
-import { renderKeyedTable } from "./components/keyed-table";
+import { KeyedTable } from "./components/keyed-table";
 
 function App() {
   const dataState = state<RowData[]>([]);
   const selectedState = state<number | null>(null);
-  const renderTickState = state(0);
-
-  dataState();
-  selectedState();
-  renderTickState();
-
-  function replaceData(count: number) {
-    const nextRows = buildData(count);
-    dataState.set([]);
-    selectedState.set(null);
-    queueMicrotask(() => {
-      dataState.set(nextRows);
-    });
-  }
+  const isSelected = selector(selectedState);
 
   function run() {
-    replaceData(1000);
+    dataState.set(buildData(1000));
+    selectedState.set(null);
   }
 
   function runLots() {
-    replaceData(10000);
+    dataState.set(buildData(10000));
+    selectedState.set(null);
   }
 
   function add() {
@@ -39,9 +28,6 @@ function App() {
     dataState.set((rows) =>
       rows.map((item, index) => (index % 10 === 0 ? { ...item, label: item.label + " !!!" } : item))
     );
-    queueMicrotask(() => {
-      renderTickState.set((value) => value + 1);
-    });
   }
 
   function clear() {
@@ -68,12 +54,10 @@ function App() {
   }
 
   function select(id: number) {
-    const previous = selectedState();
-    if (previous === id) {
+    if (selectedState() === id) {
       return;
     }
     selectedState.set(id);
-    dataState.set((rows) => rows.map((item) => (item.id === id || item.id === previous ? { ...item } : item)));
   }
 
   const actions: ActionSpec[] = [
@@ -92,7 +76,7 @@ function App() {
           <BenchmarkHeader title="Askr-keyed" actions={actions} />
         </div>
       </div>
-      {renderKeyedTable(dataState, selectedState, select, remove)}
+      <KeyedTable rows={dataState} isSelected={isSelected} onSelect={select} onRemove={remove} />
       <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true" />
     </div>
   );

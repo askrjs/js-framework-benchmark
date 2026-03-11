@@ -2,7 +2,7 @@ import { createIsland, state } from "@askrjs/askr";
 import { buildData } from "./benchmark-data";
 import type { ActionSpec, RowData } from "./benchmark-types";
 import { BenchmarkHeader } from "./components/benchmark-header";
-import { renderNonKeyedTable } from "./components/non-keyed-table";
+import { NonKeyedTable } from "./components/non-keyed-table";
 
 function App() {
   const dataState = state<RowData[]>([]);
@@ -76,7 +76,7 @@ function App() {
           <BenchmarkHeader title="Askr (non-keyed)" actions={actions} />
         </div>
       </div>
-      {renderNonKeyedTable(dataState, selectedState, select, remove)}
+      <NonKeyedTable rows={dataState} selectedId={selectedState} onSelect={select} onRemove={remove} />
       <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true" />
     </div>
   );
