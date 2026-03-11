@@ -1,188 +1,101 @@
-﻿import { createIsland, state, For } from "@askrjs/askr";
+import { createIsland, state } from "@askrjs/askr";
 
-const adjectives = [
-  "pretty",
-  "large",
-  "big",
-  "small",
-  "tall",
-  "short",
-  "long",
-  "handsome",
-  "plain",
-  "quaint",
-  "clean",
-  "elegant",
-  "easy",
-  "angry",
-  "crazy",
-  "helpful",
-  "mushy",
-  "odd",
-  "unsightly",
-  "adorable",
-  "important",
-  "inexpensive",
-  "cheap",
-  "expensive",
-  "fancy",
-];
-const colours = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
-const nouns = [
-  "table",
-  "chair",
-  "house",
-  "bbq",
-  "desk",
-  "car",
-  "pony",
-  "cookie",
-  "sandwich",
-  "burger",
-  "pizza",
-  "mouse",
-  "keyboard",
-];
-
-let nextId = 1;
-const rand = (max: number) => Math.round(Math.random() * 1000) % max;
-
-function buildData(count = 1000) {
-  const data: { id: number; label: string }[] = [];
-  for (let i = 0; i < count; i++) {
-    data.push({
-      id: nextId++,
-      label: `${adjectives[rand(adjectives.length)]} ${colours[rand(colours.length)]} ${nouns[rand(nouns.length)]}`,
-    });
-  }
-  return data;
-}
-
-interface RowData {
-  id: number;
-  label: string;
-}
-
-interface RowProps {
-  item: RowData;
-  selected: () => number | null;
-  onSelect: (id: number) => void;
-  onRemove: (id: number) => void;
-}
-
-function Row({ item, selected, onSelect, onRemove }: RowProps) {
-  return (
-    <tr key={item.id} class={() => selected() === item.id ? "danger" : ""}>
-      <td class="col-md-1">{item.id}</td>
-      <td class="col-md-4">
-        <a onClick={(e) => { e.preventDefault(); onSelect(item.id); }}>
-          {item.label}
-        </a>
-      </td>
-      <td class="col-md-1">
-        <a onClick={(e) => { e.preventDefault(); onRemove(item.id); }}>
-          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        </a>
-      </td>
-      <td class="col-md-6"></td>
-    </tr>
-  );
-}
+import { buildData } from "./benchmark-data";
+import type { ActionSpec, RowData } from "./benchmark-types";
+import { BenchmarkHeader } from "./components/benchmark-header";
+import { renderKeyedTable } from "./components/keyed-table";
 
 function App() {
-  const data = state<RowData[]>([]);
-  const selected = state<number | null>(null);
+  const dataState = state<RowData[]>([]);
+  const selectedState = state<number | null>(null);
+  const renderTickState = state(0);
 
-  const run = () => data.set(buildData(1000));
-  const runLots = () => data.set(buildData(10000));
-  const add = () => data.set((d) => d.concat(buildData(1000)));
-  const update = () =>
-    data.set((d) =>
-      d.map((it, i) => (i % 10 === 0 ? { ...it, label: it.label + " !!!" } : it))
+  dataState();
+  selectedState();
+  renderTickState();
+
+  function replaceData(count: number) {
+    const nextRows = buildData(count);
+    dataState.set([]);
+    selectedState.set(null);
+    queueMicrotask(() => {
+      dataState.set(nextRows);
+    });
+  }
+
+  function run() {
+    replaceData(1000);
+  }
+
+  function runLots() {
+    replaceData(10000);
+  }
+
+  function add() {
+    dataState.set((rows) => rows.concat(buildData(1000)));
+  }
+
+  function update() {
+    dataState.set((rows) =>
+      rows.map((item, index) => (index % 10 === 0 ? { ...item, label: item.label + " !!!" } : item))
     );
-  const clear = () => {
-    data.set([]);
-    selected.set(null);
-  };
-  const swapRows = () =>
-    data.set((d) => {
-      if (d.length > 998) {
-        const copy = d.slice();
+    queueMicrotask(() => {
+      renderTickState.set((value) => value + 1);
+    });
+  }
+
+  function clear() {
+    dataState.set([]);
+    selectedState.set(null);
+  }
+
+  function swapRows() {
+    dataState.set((rows) => {
+      if (rows.length > 998) {
+        const copy = rows.slice();
         const tmp = copy[1];
         copy[1] = copy[998];
         copy[998] = tmp;
         return copy;
       }
-      return d;
+      return rows;
     });
+  }
 
-  const remove = (id: number) => data.set((d) => d.filter((it) => it.id !== id));
-  const select = (id: number) => selected.set(id);
+  function remove(id: number) {
+    dataState.set((rows) => rows.filter((item) => item.id !== id));
+    selectedState.set((selected) => (selected === id ? null : selected));
+  }
+
+  function select(id: number) {
+    const previous = selectedState();
+    if (previous === id) {
+      return;
+    }
+    selectedState.set(id);
+    dataState.set((rows) => rows.map((item) => (item.id === id || item.id === previous ? { ...item } : item)));
+  }
+
+  const actions: ActionSpec[] = [
+    { id: "run", label: "Create 1,000 rows", onClick: run },
+    { id: "runlots", label: "Create 10,000 rows", onClick: runLots },
+    { id: "add", label: "Append 1,000 rows", onClick: add },
+    { id: "update", label: "Update every 10th row", onClick: update },
+    { id: "clear", label: "Clear", onClick: clear },
+    { id: "swaprows", label: "Swap Rows", onClick: swapRows },
+  ];
 
   return (
     <div class="container">
       <div class="jumbotron">
         <div class="row">
-          <div class="col-md-6">
-            <h1>Askr-keyed</h1>
-          </div>
-          <div class="col-md-6">
-            <div class="row">
-              <div class="col-sm-6 smallpad">
-                <button id="run" class="btn btn-primary btn-block" type="button" onClick={run}>
-                  Create 1,000 rows
-                </button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button id="runlots" class="btn btn-primary btn-block" type="button" onClick={runLots}>
-                  Create 10,000 rows
-                </button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button id="add" class="btn btn-primary btn-block" type="button" onClick={add}>
-                  Append 1,000 rows
-                </button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button id="update" class="btn btn-primary btn-block" type="button" onClick={update}>
-                  Update every 10th row
-                </button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button id="clear" class="btn btn-primary btn-block" type="button" onClick={clear}>
-                  Clear
-                </button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button id="swaprows" class="btn btn-primary btn-block" type="button" onClick={swapRows}>
-                  Swap Rows
-                </button>
-              </div>
-            </div>
-          </div>
+          <BenchmarkHeader title="Askr-keyed" actions={actions} />
         </div>
       </div>
-
-      <table class="table table-hover table-striped test-data">
-        <tbody id="tbody">
-          {For(
-            () => data(),
-            (item) => item.id,
-            (item) => (
-              <Row
-                item={item}
-                selected={selected}
-                onSelect={select}
-                onRemove={remove}
-              />
-            )
-          )}
-        </tbody>
-      </table>
-
-      <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+      {renderKeyedTable(dataState, selectedState, select, remove)}
+      <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true" />
     </div>
   );
 }
 
-createIsland({ root: "main", component: App });
+createIsland({ root: "main", component: App as never });

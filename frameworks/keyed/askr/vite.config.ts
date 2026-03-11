@@ -1,17 +1,17 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: './',
+  base: "./",
   esbuild: {
-    jsx: 'automatic',
-    jsxImportSource: '@askrjs/askr'
+    jsx: "automatic",
+    jsxImportSource: "@askrjs/askr",
   },
   build: {
-    outDir: 'dist',
+    outDir: "dist",
     rollupOptions: {
       output: {
-        entryFileNames: 'main.js'
-      }
-    }
-  }
-})
+        entryFileNames: "main.js",
+      },
+    },
+  },
+});
