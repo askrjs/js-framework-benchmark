@@ -1,4 +1,4 @@
-import { createIsland, state } from "@askrjs/askr";
+import { createIsland, selector, state } from "@askrjs/askr";
 import { buildData } from "./benchmark-data";
 import type { ActionSpec, RowData } from "./benchmark-types";
 import { BenchmarkHeader } from "./components/benchmark-header";
@@ -7,6 +7,7 @@ import { NonKeyedTable } from "./components/non-keyed-table";
 function App() {
   const dataState = state<RowData[]>([]);
   const selectedState = state<number | null>(null);
+  const isSelected = selector(selectedState);
 
   function run() {
     dataState.set(buildData(1000));
@@ -52,12 +53,10 @@ function App() {
   }
 
   function select(id: number) {
-    const previous = selectedState();
-    if (previous === id) {
+    if (selectedState() === id) {
       return;
     }
     selectedState.set(id);
-    dataState.set((rows) => rows.map((item) => (item.id === id || item.id === previous ? { ...item } : item)));
   }
 
   const actions: ActionSpec[] = [
@@ -76,7 +75,7 @@ function App() {
           <BenchmarkHeader title="Askr (non-keyed)" actions={actions} />
         </div>
       </div>
-      <NonKeyedTable rows={dataState} selectedId={selectedState} onSelect={select} onRemove={remove} />
+      <NonKeyedTable rows={dataState} isSelected={isSelected} onSelect={select} onRemove={remove} />
       <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true" />
     </div>
   );
