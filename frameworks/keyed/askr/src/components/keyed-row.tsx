@@ -8,26 +8,26 @@ interface KeyedRowProps {
 }
 
 export function KeyedRow({ item, isSelected, onSelect, onRemove }: KeyedRowProps) {
+  function handleSelect(event: MouseEvent) {
+    event.preventDefault();
+    onSelect(item.id);
+  }
+
+  function handleRemove(event: MouseEvent) {
+    event.preventDefault();
+    onRemove(item.id);
+  }
+
   return (
     <tr class={() => (isSelected(item.id) ? "danger" : "")}>
       <td class="col-md-1">{item.id}</td>
       <td class="col-md-4">
-        <a
-          onClick={(event: MouseEvent) => {
-            event.preventDefault();
-            onSelect(item.id);
-          }}
-        >
+        <a onClick={handleSelect}>
           {item.label}
         </a>
       </td>
       <td class="col-md-1">
-        <a
-          onClick={(event: MouseEvent) => {
-            event.preventDefault();
-            onRemove(item.id);
-          }}
-        >
+        <a onClick={handleRemove}>
           <span class="glyphicon glyphicon-remove" aria-hidden="true" />
         </a>
       </td>

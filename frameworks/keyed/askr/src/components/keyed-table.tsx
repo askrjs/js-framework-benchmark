@@ -23,3 +23,4 @@ export function KeyedTable({ rows, isSelected, onSelect, onRemove }: KeyedTableP
     </table>
   );
 }
+
