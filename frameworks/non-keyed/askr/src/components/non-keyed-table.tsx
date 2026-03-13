@@ -1,4 +1,4 @@
-import { For, type State } from "@askrjs/askr";
+import { type State } from "@askrjs/askr";
 
 import type { RowData } from "../benchmark-types";
 import { NonKeyedRow } from "./non-keyed-row";
@@ -14,11 +14,9 @@ export function NonKeyedTable({ rows, isSelected, onSelect, onRemove }: NonKeyed
   return (
     <table class="table table-hover table-striped test-data">
       <tbody>
-        {For(
-          () => rows(),
-          (item) => item.id,
-          (item) => <NonKeyedRow item={item} isSelected={isSelected} onSelect={onSelect} onRemove={onRemove} />
-        )}
+        {rows().map((item) => (
+          <NonKeyedRow item={item} isSelected={isSelected} onSelect={onSelect} onRemove={onRemove} />
+        ))}
       </tbody>
     </table>
   );

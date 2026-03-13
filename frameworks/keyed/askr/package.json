@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "js-framework-benchmark": {
-    "frameworkVersion": "0.0.28-local",
+    "frameworkVersion": "0.0.29-local",
     "frameworkHomeURL": "https://github.com/askrjs/askr",
     "customURL": "/dist"
   },
