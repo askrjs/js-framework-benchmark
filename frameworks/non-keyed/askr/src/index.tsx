@@ -1,5 +1,4 @@
-import { selector, state } from "@askrjs/askr";
-import { createIsland } from "@askrjs/askr/boot";
+import { createIsland, selector, state } from "@askrjs/askr";
 import { buildData } from "./benchmark-data";
 import type { ActionSpec, RowData } from "./benchmark-types";
 import { BenchmarkHeader } from "./components/benchmark-header";
