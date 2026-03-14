@@ -6,37 +6,37 @@ import { BenchmarkHeader } from "./components/benchmark-header";
 import { NonKeyedTable } from "./components/non-keyed-table";
 
 function App() {
-  const dataState = state<RowData[]>([]);
-  const selectedState = state<number | null>(null);
-  const isSelected = selector(selectedState);
+  const [data, setData] = state<RowData[]>([]);
+  const [selected, setSelected] = state<number | null>(null);
+  const isSelected = selector(selected);
 
   function run() {
-    dataState.set(buildData(1000));
-    selectedState.set(null);
+    setData(buildData(1000));
+    setSelected(null);
   }
 
   function runLots() {
-    dataState.set(buildData(10000));
-    selectedState.set(null);
+    setData(buildData(10000));
+    setSelected(null);
   }
 
   function add() {
-    dataState.set((rows) => rows.concat(buildData(1000)));
+    setData((rows) => rows.concat(buildData(1000)));
   }
 
   function update() {
-    dataState.set((rows) =>
+    setData((rows) =>
       rows.map((item, index) => (index % 10 === 0 ? { ...item, label: item.label + " !!!" } : item))
     );
   }
 
   function clear() {
-    dataState.set([]);
-    selectedState.set(null);
+    setData([]);
+    setSelected(null);
   }
 
   function swapRows() {
-    dataState.set((rows) => {
+    setData((rows) => {
       if (rows.length > 998) {
         const copy = rows.slice();
         const tmp = copy[1];
@@ -49,15 +49,15 @@ function App() {
   }
 
   function remove(id: number) {
-    dataState.set((rows) => rows.filter((item) => item.id !== id));
-    selectedState.set((selected) => (selected === id ? null : selected));
+    setData((rows) => rows.filter((item) => item.id !== id));
+    setSelected((current) => (current === id ? null : current));
   }
 
   function select(id: number) {
-    if (selectedState() === id) {
+    if (selected() === id) {
       return;
     }
-    selectedState.set(id);
+    setSelected(id);
   }
 
   const actions: ActionSpec[] = [
@@ -76,7 +76,7 @@ function App() {
           <BenchmarkHeader title="Askr (non-keyed)" actions={actions} />
         </div>
       </div>
-      <NonKeyedTable rows={dataState} isSelected={isSelected} onSelect={select} onRemove={remove} />
+      <NonKeyedTable rows={data} isSelected={isSelected} onSelect={select} onRemove={remove} />
       <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true" />
     </div>
   );
