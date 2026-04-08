@@ -1,11 +1,9 @@
-import { defineConfig } from 'vite'
+import { askr } from '@askrjs/askr-vite'
+import { defineConfig } from 'vite-plus'
 
 export default defineConfig({
   base: './',
-  esbuild: {
-    jsx: 'automatic',
-    jsxImportSource: '@askrjs/askr'
-  },
+  plugins: [askr()],
   build: {
     outDir: 'dist',
     rollupOptions: {
