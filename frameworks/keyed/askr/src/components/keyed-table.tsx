@@ -14,11 +14,9 @@ export function KeyedTable({ rows, isSelected, onSelect, onRemove }: KeyedTableP
   return (
     <table class="table table-hover table-striped test-data">
       <tbody>
-        {For(
-          () => rows(),
-          (item) => item.id,
-          (item) => <KeyedRow item={item} isSelected={isSelected} onSelect={onSelect} onRemove={onRemove} />
-        )}
+        <For each={rows} by={(item) => item.id}>
+          {(item) => <KeyedRow item={item} isSelected={isSelected} onSelect={onSelect} onRemove={onRemove} />}
+        </For>
       </tbody>
     </table>
   );
