@@ -1,4 +1,4 @@
-import { askr } from '@askrjs/askr-vite'
+﻿import { askr } from '@askrjs/vite'
 import { defineConfig } from 'vite-plus'
 
 export default defineConfig({
