@@ -23,7 +23,7 @@
     "vite-plus": "^0.1.19"
   },
   "dependencies": {
-    "@askrjs/askr": "file:../../../../askr"
+    "@askrjs/askr": "^0.0.29"
   }
 }
 
