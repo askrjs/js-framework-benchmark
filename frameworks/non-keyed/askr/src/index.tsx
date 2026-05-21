@@ -1,4 +1,5 @@
-import { createIsland, selector, state } from "@askrjs/askr";
+import { selector, state } from "@askrjs/askr";
+import { createIsland } from "@askrjs/askr/boot";
 import { buildData } from "./benchmark-data";
 import type { ActionSpec, RowData } from "./benchmark-types";
 import { BenchmarkHeader } from "./components/benchmark-header";
@@ -53,9 +54,6 @@ function App() {
   }
 
   function select(id: number) {
-    if (selected() === id) {
-      return;
-    }
     setSelected(id);
   }
 

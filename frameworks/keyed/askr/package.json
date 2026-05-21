@@ -1,10 +1,10 @@
-﻿{
+{
   "name": "js-framework-benchmark-askr",
   "version": "0.0.1",
   "type": "module",
   "private": true,
   "js-framework-benchmark": {
-    "frameworkVersion": "0.0.1-local",
+    "frameworkVersion": "0.0.37-local",
     "frameworkHomeURL": "https://github.com/askrjs/askr",
     "customURL": "/dist"
   },
@@ -17,13 +17,12 @@
     "lint": "npx --yes eslint@9 ."
   },
   "devDependencies": {
-    "@askrjs/vite": "0.0.1",
+    "@askrjs/vite": "0.0.2",
     "typescript": "5.9.3",
-    "vite": "^8.0.1",
-    "vite-plus": "^0.1.19"
+    "vite-plus": "^0.1.19",
+    "vite": "^8.0.1"
   },
   "dependencies": {
-    "@askrjs/askr": ">=0.0.30 <0.1.0"
+    "@askrjs/askr": ">=0.0.37 <0.1.0"
   }
 }
-

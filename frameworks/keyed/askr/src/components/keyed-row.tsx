@@ -20,18 +20,18 @@ export function KeyedRow({ item, isSelected, onSelect, onRemove }: KeyedRowProps
 
   return (
     <tr class={() => (isSelected(item.id) ? "danger" : "")}>
-      <td class="col-md-1">{item.id}</td>
-      <td class="col-md-4">
+      <td key="id" class="col-md-1">{() => item.id}</td>
+      <td key="label" class="col-md-4">
         <a onClick={handleSelect}>
-          {item.label}
+          {() => item.label}
         </a>
       </td>
-      <td class="col-md-1">
+      <td key="remove" class="col-md-1">
         <a onClick={handleRemove}>
           <span class="glyphicon glyphicon-remove" aria-hidden="true" />
         </a>
       </td>
-      <td class="col-md-6" />
+      <td key="spacer" class="col-md-6" />
     </tr>
   );
 }
