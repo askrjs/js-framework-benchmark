@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "js-framework-benchmark": {
-    "frameworkVersion": "0.0.37-local",
+    "frameworkVersion": "0.0.52-local",
     "frameworkHomeURL": "https://github.com/askrjs/askr",
     "customURL": "/dist"
   },
@@ -13,6 +13,7 @@
     "build": "vite build",
     "build-prod": "vite build",
     "preview": "vite preview",
+    "typecheck": "tsc --noEmit --pretty false",
     "fmt": "npx prettier@latest --write .",
     "lint": "npx --yes eslint@9 ."
   },
@@ -23,6 +24,6 @@
     "vite": "^8.0.1"
   },
   "dependencies": {
-    "@askrjs/askr": ">=0.0.37 <0.1.0"
+    "@askrjs/askr": "file:../../../../askr"
   }
 }

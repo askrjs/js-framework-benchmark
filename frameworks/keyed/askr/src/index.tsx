@@ -80,4 +80,4 @@ function App() {
   );
 }
 
-createIsland({ root: "main", component: App as never });
+createIsland({ root: "main", component: App });
