@@ -34,7 +34,7 @@
   "dependencies": {
     "chromedriver": "147.0.0",
     "cross-env": "10.1.0",
-    "lighthouse": "13.0.3",
+    "lighthouse": "13.5.0",
     "playwright": "1.58.2",
     "playwright-firefox": "1.58.2",
     "playwright-webkit": "1.58.2",
