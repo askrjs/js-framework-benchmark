@@ -20,7 +20,7 @@
     "@askrjs/vite": "0.0.2",
     "typescript": "5.9.3",
     "vite-plus": "^0.1.19",
-    "vite": "^8.0.1"
+    "vite": "^8.3.4"
   },
   "dependencies": {
     "@askrjs/askr": ">=0.0.37 <0.1.0"
