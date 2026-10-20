@@ -19,7 +19,7 @@
   "devDependencies": {
     "@askrjs/vite": "0.0.2",
     "typescript": "5.9.3",
-    "vite-plus": "^0.1.19",
+    "vite-plus": "^1.1.0",
     "vite": "^8.0.1"
   },
   "dependencies": {
