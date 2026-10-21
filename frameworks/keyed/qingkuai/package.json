@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "qingkuai": "^1.0.61",
-        "vite": "^8.0.3",
+        "vite": "^8.3.4",
         "vite-plugin-qingkuai": "^1.0.14"
     },
     "devDependencies": {
