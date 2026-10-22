@@ -13,6 +13,6 @@
   },
   "dependencies": {
     "native-document": "1.0.113",
-    "vite": "^7.0.4"
+    "vite": "^7.3.7"
   }
 }
