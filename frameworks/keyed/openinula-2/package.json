@@ -19,7 +19,7 @@
     "@openinula/vite-plugin-inula-next": "^0.0.7"
   },
   "devDependencies": {
-    "vite": "^4.4.9"
+    "vite": "^6.4.4"
   },
   "keywords": [
     "inula-next"
