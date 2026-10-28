@@ -23,7 +23,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "esbuild": "^0.25.12",
-    "vite": "^4.4.8"
+    "vite": "^6.4.4"
   },
   "dependencies": {
     "@grucloud/bau": "0.92.0",
