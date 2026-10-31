@@ -23,8 +23,8 @@
     "prettier-plugin-ember-template-tag": "^2.0.0",
     "terser": "5.32.0",
     "typescript": "^5.3.3",
-    "vite": "5.4.5",
-    "vite-plugin-babel": "^1.2.0",
+    "vite": "8.3.5",
+    "vite-plugin-babel": "^1.7.3",
     "glint-environment-gxt": "^0.0.5"
   },
   "js-framework-benchmark": {
