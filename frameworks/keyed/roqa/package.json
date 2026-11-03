@@ -19,6 +19,6 @@
 	},
 	"devDependencies": {
 		"@roqajs/vite-plugin": "0.0.7",
-		"vite": "6.4.1"
+		"vite": "6.4.5"
 	}
 }
